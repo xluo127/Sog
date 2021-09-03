@@ -1,6 +1,6 @@
 module Sog
 
-export sog, tmpsog, zo, zo1, zo3, newsog, newsog2, newsog3, newsog4
+export sog
 """
     sog(x)
 
@@ -20,13 +20,12 @@ Examples:
     sog([[1, 1, 1, 2, 2], [1.5, 1.5, 20.0, 3.0, 3.0]] returns: [true, false, true, true, false]
 
 """
-function sog(x=[])                       
-    if x == []
+function sog(iVector=[], orders = eachindex(iVector))                       
+    if iVector == []
         return nothing
     end
 
-    iVector = x
-    len = length(x)
+    len = length(iVector)
     #lenv = length(x[1])
 
     if typeof(iVector[1]) <: Vector{}           #For Vector of Vectors
@@ -40,64 +39,26 @@ function sog(x=[])
         end
 
         if lenv >= 2
-            r0 = map(sog, iVector)
-            rInt = Vector{Vector{Int64}}(r0)
-            oVector = Vector{Bool}(replace(!iszero, sum(rInt)))
-
+            if length(eachindex(iVector)) != length(orders)
+                println("Please specify the order of columns correctly! Number of columns is the length of order.")
+                return nothing
+            end
+            oVector = ini0(iVector[orders[1]])
+            for i in orders[2:end]
+                oVector = zore_or_one(oVector, iVector[i])
+            end
             return oVector
         end 
-    end
     
-    if len == 1
+    elseif len == 1
         return [true]
-    end
     
-    r = iVector[1:(len-1)] .=== iVector[2:len]
-    r1 = Vector{Bool}(replace(iszero, r))
-    oVector = Vector{Bool}(append!([1], r1))
-
+    else
+        oVector = ini0(iVector)
+    end
 
     return oVector
 end
-
-
-
-function zo(re, xi)
-    for j in 2:length(re)
-        re[j] = re[j]==1 ? 1 : !(xi[j]===xi[j-1])
-    end
-    return re
-end
-    
-    
-function tmpsog(x)
-    re = zeros(Bool, length(x[1]))
-    re[1] = 1
-    for i in 1:length(x)
-        re = zo(re, x[i])
-    end
-    return re
-end
-
-function zo1(re, xi)
-    for j in 2:length(re)
-        @inbounds re[j] = re[j]==1 ? 1 : !(xi[j]===xi[j-1])
-    end
-    return re
-end
-    
-    
-function newsog(x)
-    re = zeros(Bool, length(x[1]))
-    re[1] = 1
-    for i in 1:length(x)
-        re = zo1(re, x[i])
-    end
-    return re
-end
-
-
-
 
 function ini0(x1)
     len = length(x1)
@@ -109,42 +70,11 @@ function ini0(x1)
     return re
 end
 
-
-function newsog2(x)
-    re = ini0(x[1])
-    for i in 2:length(x)
-        re = zo1(re, x[i])
-    end
-    return re
-end
-
-function zo3(re, xi)
+function zore_or_one(re, xi)
     Threads.@threads for j in 2:length(re)
         @inbounds re[j] = re[j]==1 ? 1 : !(xi[j]===xi[j-1])
     end
     return re
 end
-    
-    
-function newsog3(x)
-    re = ini0(x[1])
-    for i in 2:length(x)
-        re = zo3(re, x[i])
-    end
-    return re
-end
-
-function newsog4(x, orders = eachindex(x))
-    if length(eachindex(x)) != length(orders)
-        println("Please specify the order of columns correctly! Number of columns is the length of order.")
-        return nothing
-    end
-    re = ini0(x[orders[1]])
-    for i in orders[2:end]
-        re = zo3(re, x[i])
-    end
-    return re
-end
-
 
 end
