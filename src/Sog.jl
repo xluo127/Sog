@@ -26,10 +26,10 @@ function sog(iVector=[], orders = eachindex(iVector))
     end
 
     len = length(iVector)
-    #lenv = length(x[1])
+    #lenv = length(iVector[1])
 
     if typeof(iVector[1]) <: Vector{}           #For Vector of Vectors
-        lenv = length(x[1])
+        lenv = length(iVector[1])
         if lenv == 0
             return nothing 
         end    
