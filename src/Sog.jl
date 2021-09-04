@@ -16,6 +16,9 @@ The additional argument `orders` can work for a `Vector` of `Vectors` if you are
 This is not perfect for users who are not familar with types of data so just leave it there is fine. This part might be removed to let 
 the program does the thing in the future.
 
+Parallel computation is used so, by setting your environment variable "JULIA_NUM_THREADS" to more than one, you can get a faster speed with this package.
+
+
 Examples:
 
     sog([1,2,2,2,1,3,3,1,1]) returns: [true, true, false, false, true, true, false, true, false]
@@ -68,7 +71,7 @@ function ini0(x1)
     len = length(x1)
     re = zeros(Bool, len)
     re[1] = 1
-    for j in 2:len
+    Threads.@threads for j in 2:len
         @inbounds re[j] = !(x1[j]===x1[j-1])
     end
     return re
