@@ -2,9 +2,9 @@ module Sog
 
 export sog
 """
-    sog(x)
+    sog(iVector=[], orders = eachindex(iVector))
 
-The function `sog()` takes a `Vector` of any type `x` as its input with any possible length, and will return a `Bool Vector` with the same length as input. Values
+The function `sog()` takes a `Vector` of any type `iVector` as its input with any possible length, and will return a `Bool Vector` with the same length as input. Values
  `true` or `false` in the output depends on whether one element in the `Vector` is the start of a group or not. The sog() will return 
  'nothing' if the length of input is 0. As any type can be applied in the input, be careful! To check whether two elements `a` and `b` are treated
 as the same, please call `isequal(a, b)` to see the result. 
@@ -12,12 +12,17 @@ as the same, please call `isequal(a, b)` to see the result.
 When taking `Vector` of `Vectors`, the length of output should the same as the length of every `Vector`, and what `sog()` do is to compare 
 one element with the previous one on the same position for each `Vector`.
 
+The additional argument `orders` can work for a `Vector` of `Vectors` if you are sure that the change of order can get a faster speed. 
+This is not perfect for users who are not familar with types of data so just leave it there is fine. This part might be removed to let 
+the program does the thing in the future.
+
 Examples:
 
     sog([1,2,2,2,1,3,3,1,1]) returns: [true, true, false, false, true, true, false, true, false]
     sog() returns: nothing
     sog(["a", "a", "a", 'a']) returns: [true, false, false, true]
     sog([[1, 1, 1, 2, 2], [1.5, 1.5, 20.0, 3.0, 3.0]] returns: [true, false, true, true, false]
+    
 
 """
 function sog(iVector=[], orders = eachindex(iVector))                       
@@ -26,7 +31,6 @@ function sog(iVector=[], orders = eachindex(iVector))
     end
 
     len = length(iVector)
-    #lenv = length(iVector[1])
 
     if typeof(iVector[1]) <: Vector{}           #For Vector of Vectors
         lenv = length(iVector[1])

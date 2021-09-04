@@ -2,7 +2,7 @@ using Sog
 using Test
 using Random
 
-@testset "MyPkg0.jl" begin
+@testset "Sog.jl" begin
     @test isequal(sog(), nothing)
     @test isequal(sog([]), nothing)
     @test isequal(sog(['o']), Bool[1])
@@ -20,7 +20,7 @@ using Random
     @test isequal(sog([[], []]),nothing)
     @test isequal(sog([[1, 1, 1, 2, 2], [1.5, 1.5, 20.0, 3.0, 3.0]]), Bool[1, 0, 1, 1, 0])
     @test isequal(sog([["abc", "ab", "ab"],["ab", "ab", "ab"]]), Bool[1, 1, 0])
-    #@time sog(rand(1:100, 10^6))
+
     #xxx = [round.(rand(10^6)), rand(1:10, 10^6), [randstring('a':'e', 2) for _ in 1:10^6]]
     #@time sog(xxx)
 end
