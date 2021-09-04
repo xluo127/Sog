@@ -21,8 +21,8 @@ Examples:
     sog([1,2,2,2,1,3,3,1,1]) returns: [true, true, false, false, true, true, false, true, false]
     sog() returns: nothing
     sog(["a", "a", "a", 'a']) returns: [true, false, false, true]
-    sog([[1, 1, 1, 2, 2], [1.5, 1.5, 20.0, 3.0, 3.0]] returns: [true, false, true, true, false]
-    
+    sog([[1, 1, 1, 2, 2], [1.5, 1.5, 20.0, 3.0, 3.0]]) returns: [true, false, true, true, false]
+    sog([[1, 1, 1, 2, 2], [1.5, 1.5, 20.0, 3.0, 3.0]], [2, 1]) returns: [true, false, true, true, false]
 
 """
 function sog(iVector=[], orders = eachindex(iVector))                       
